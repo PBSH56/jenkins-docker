@@ -17,11 +17,11 @@ cd jenkins-docker
 3. build Docker image
 
 ```bash
-sudo docker build -t your Comment
+sudo docker build -t your_Comment
 ```
 
 4. Run jenkins docker image
 
 ```bash
-sudo docker run jenkins-docker image ID
+sudo docker run jenkins-docker_image_ID
 ```
