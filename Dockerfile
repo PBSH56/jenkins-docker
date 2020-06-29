@@ -1,23 +1,18 @@
-FROM jenkins/jenkins:lts
+FROM centos
 
-USER root
+RUN yum install wget -y
 
-RUN apt-get update && \
-apt-get -y install apt-transport-https \
-    ca-certificates \
-    curl \
-    gnupg2 \
-    software-properties-common && \
-curl -fsSL https://download.docker.com/linux/$(. /etc/os-release; echo "$ID")/gpg > /tmp/dkey; apt-key add /tmp/dkey && \
-add-apt-repository \
-    "deb [arch=amd64] https://download.docker.com/linux/$(. /etc/os-release; echo "$ID") \
-    $(lsb_release -cs) \
-    stable" && \
-apt-get update && \
-apt-get -y install docker-ce
+RUN wget -O /etc/yum.repos.d/jenkins.repo https://pkg.jenkins.io/redhat-stable/jenkins.repo
 
-RUN apt-get install -y docker-ce
+RUN rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io.key
 
-RUN usermod -a -G docker jenkins
+RUN yum install jenkins -y
 
-USER jenkins
+RUN yum install java-11-openjdk.x86_64 -y
+
+RUN yum install net-tools -y
+
+RUN echo -e "jenkins ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
+
+CMD java -jar /usr/lib/jenkins/jenkins.war
+
